@@ -1,5 +1,5 @@
 # Live At
-Open [Get Wiki](https://get-wiki.vercel.app/)
+Open [Get Wiki](https://get-wikiu.vercel.app/)
 
 # Getting Started with Create React App
 
