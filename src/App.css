@@ -47,3 +47,22 @@ h2{
   font-size: xx-large;
   font-family: 'fantasy', sans-serif;
 }
+
+button{
+  border: none;
+  outline: none;
+}
+
+.mic{
+  border: none;
+  outline: none;
+  padding: 1px;
+  height: auto;
+  color: gray;
+  margin: auto;
+}
+
+.mic:hover{
+  transform: scale(1.2);
+  transition: 1s;
+}
