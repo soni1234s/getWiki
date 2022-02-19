@@ -84,7 +84,7 @@ export const GetWiki = () => {
 
     setData(resp.data.query.search);
     setSearchInfo(resp.data.query.searchinfo);
-
+    setIsListening(false);
     // console.log(searchInfo)
     console.log(data);
   };
