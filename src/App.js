@@ -3,11 +3,11 @@ import { GetWiki } from './getwiki';
 
 function App() {
   return (
-    <div>
+    <>
   <Routes>
     <Route path="/" element={<GetWiki/>}/>
   </Routes>
-    </div>
+    </>
   );
 }
 

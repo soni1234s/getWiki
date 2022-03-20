@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SearchIcon from "@mui/icons-material/Search";
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
+import { Research } from "./recent-searches";
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -24,6 +25,7 @@ export const GetWiki = () => {
   const [data, setData] = useState([]);
   const [searchInfo, setSearchInfo] = useState({});
   const [page, setPage] = useState(1);
+  const [suggestion, SetSuggestion] = useState([]);
 
   //for mic integration
   const [isListening, setIsListening] = useState(false);
@@ -68,7 +70,7 @@ export const GetWiki = () => {
   };
 
   const getResults = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     if (search === "") {
       toast.error("Please enter some data");
       return;
@@ -82,22 +84,49 @@ export const GetWiki = () => {
       setSearch("");
     }
 
+    //console.log(resp)
     setData(resp.data.query.search);
     setSearchInfo(resp.data.query.searchinfo);
     setIsListening(false);
+    SetSuggestion([]);
     // console.log(searchInfo)
-    console.log(data);
+
   };
 
-  const handleInputs = (e) => {
+  const handleInputs = async (e) => {
     e.preventDefault();
     setSearch(e.target.value);
+
+    console.log(search)
+    //console.log(search);
+
+    if(e.target.value.length === 0){
+      SetSuggestion([]);
+      return;
+    }
+
+   // console.log(search)
+
+    const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&origin=*&srlimit=5&srsearch=${search}`;
+    const resp = await axios.get(endpoint);
+
+    //console.log(resp)
+    if (!resp.data.query) {
+        SetSuggestion([])
+        return;
+    }
+    
+    var sg = (resp.data.query.search) ? (resp.data.query.search.map((res) => {
+         return res.title;
+    })) : [];
+
+    SetSuggestion(sg);
   };
 
   return (
-    <div>
+    <>
       <div className="jumbotron">
-        <div class="row mt-5">
+      
           <div class="col-md-5 mx-auto">
             <h2>
               <Typewriter
@@ -116,29 +145,37 @@ export const GetWiki = () => {
                 value={search}
                 onChange={handleInputs}
                 id="example-search-input"
+                autocomplete="off"
               />
-              <button onClick={() => setIsListening(prevState => !prevState)} style={{borderStyle: "none", backgroundColor: "white", textAlign: "center"}}  >
+              <div onClick={() => setIsListening(prevState => !prevState)}  className="Parentmic">
                { (!isListening) ? <MicIcon className="mic"/> : <MicOffIcon className="mic"/>}
-              </button>
+              </div>
 
               <div
-                style={{
-                  backgroundColor: "gray",
-                  padding: "12px",
-                  width: "50px",
-                  height: "50px",
-                }}
+               className="searchButton"
               >
-                {" "}
                 <SearchIcon
-                  onClick={getResults}
-                  style={{ color: "white", height: "30px" }}
-                />{" "}
+                  onClick={getResults}  
+                />
               </div>
               <ToastContainer />
             </div>
+            <div className="suggestions">
+            {
+              (suggestion.length > 0) ? (suggestion.map((result) => {
+                    return  <>
+                            <div className="suggestion" onClick={() => {
+                                 setSearch(result)
+                                 getResults();
+                            }}><p>{result}</p></div>
+                            <hr color="white"/>
+                            </>
+              })) : <></>
+            }
+            </div>
+
           </div>
-        </div>
+       
         {searchInfo.totalhits ? (
           <p
             style={{
@@ -154,7 +191,9 @@ export const GetWiki = () => {
           ""
         )}
       </div>
-
+      <div className="parentDiv">
+     
+       <Research/>
       {Math.floor(searchInfo.totalhits / 20) && search !== "" ? (
         <div className="results">
           {data.map((result, i) => {
@@ -200,10 +239,12 @@ export const GetWiki = () => {
               <Pagination count={2} page={page} onChange={handleChange} />
             </Stack>{" "}
           </div>
+
         </div>
       ) : (
         <></>
       )}
     </div>
+    </>
   );
 };
