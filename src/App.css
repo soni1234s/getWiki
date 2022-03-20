@@ -1,3 +1,17 @@
+::-webkit-scrollbar {
+  height: 2px;
+  width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(155, 155, 163); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(153, 155, 250); 
+}
 
 .jumbotron{
   background-color: rgb(26, 100, 75);
@@ -106,10 +120,6 @@ hr{
   margin-bottom: 0px;
 }
 
-.recent-searches{
-  text-align: center;
-}
-
 .parentDiv{
    display: flex;
    flex-direction: column;
@@ -119,18 +129,3 @@ hr{
    justify-content: center;
 }
 
-.container {
-  width: 60vw;
-  height: 50px;
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  margin-top: 60px;
-}
-
-.item {
-  width: 100px;
-  flex-shrink: 0;
-  height: 100px;
-}

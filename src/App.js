@@ -1,5 +1,5 @@
 import {Route,Routes} from 'react-router-dom'
-import { GetWiki } from './getwiki';
+import { GetWiki } from './Components/getwiki';
 
 function App() {
   return (
